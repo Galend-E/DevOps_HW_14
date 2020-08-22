@@ -19,10 +19,10 @@ resource "aws_instance" "build" {
       "sudo apt install -y git default-jdk maven awscli",
       "git clone https://github.com/Galend-E/boxfuse.git /home/boxfuse",
       "cd /home/boxfuse",
-      "mvn package"    ]
+      "mvn package"]
     connection {
-            timeout = "5m"
-            user = "ubuntu"
+      timeout = "5m"
+      user = "ubuntu"
     }
   }
 }
@@ -31,5 +31,5 @@ resource "aws_s3_bucket_object" "war" {
   bucket = "bak-01.train.com"
   key = "hello.war"
   source = "/home/boxfuse/target/hello-1.0.war"
-  etag = filemd5("path/to/file")
+  etag = filemd5("/home/boxfuse/target/hello-1.0.war")
 }
