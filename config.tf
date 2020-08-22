@@ -8,7 +8,7 @@ resource "aws_instance" "build" {
   key_name = "ansible"
   security_groups = ["full_access"]
   subnet_id = "subnet-8f7f0ec2"
-  associate_public_ip_address = True
+  associate_public_ip_address = true
   tags = {
     Name = "build"
   }
