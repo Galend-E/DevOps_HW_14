@@ -6,7 +6,7 @@ resource "aws_instance" "build" {
   ami = "ami-0bcc094591f354be2"
   instance_type = "t2.micro"
   key_name = "ansible"
-  security_groups = ["full_access"]
+  security_groups = ["sg-02cc480bb425000f4"]
   subnet_id = "subnet-8f7f0ec2"
   associate_public_ip_address = true
   tags = {
@@ -23,6 +23,7 @@ resource "aws_instance" "build" {
     connection {
       timeout = "5m"
       user = "ubuntu"
+      private_key = "/root/.ssh/id_rsa"
     }
   }
 }
