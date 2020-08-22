@@ -27,10 +27,3 @@ resource "aws_instance" "build" {
     }
   }
 }
-
-resource "aws_s3_bucket_object" "war" {
-  bucket = "bak-01.train.com"
-  key = "hello.war"
-  source = "/home/boxfuse/target/hello-1.0.war"
-  etag = filemd5("/home/boxfuse/target/hello-1.0.war")
-}
