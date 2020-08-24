@@ -29,4 +29,28 @@ resource "aws_instance" "build" {
   }
 }
 
+resource "aws_instance" "web" {
+  ami = "ami-0bcc094591f354be2"
+  instance_type = "t2.micro"
+  key_name = "ansible"
+  security_groups = ["sg-02cc480bb425000f4"]
+  subnet_id = "subnet-8f7f0ec2"
+  associate_public_ip_address = true
+  depends_on = ["aws_instance.build"]
+  tags = {
+    Name = "web"
+  }
 
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt update && sudo apt install -y tomcat8",
+      "sudo curl -k https://buk-02.train.com.s3.amazonaws.com/hello.war --output /var/lib/tomcat8/webapps/hello.war",
+      "sudo service tomcat8 restart"
+    ]
+    connection {
+      timeout = "5m"
+      user = "ubuntu"
+      private_key = "${file("~/.ssh/id_rsa")}"
+    }
+  }
+}
