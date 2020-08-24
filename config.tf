@@ -15,11 +15,12 @@ resource "aws_instance" "build" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo apt update",
-      "sudo apt install -y git default-jdk maven",
+      "sudo apt update && sudo apt install -y git default-jdk maven",
       "sudo git clone https://github.com/Galend-E/boxfuse.git /home/boxfuse",
       "cd /home/boxfuse",
-      "sudo mvn package"]
+      "sudo mvn package",
+      "curl -k -X PUT -T './target/hello-1.0.war' -H 'Host: buk-02.train.com.s3.amazonaws.com' -H 'Date: $(date -R)' -H 'Content-Type: application/java-archive' https://buk-02.train.com.s3.amazonaws.com/hello.war"
+    ]
     connection {
       timeout = "5m"
       user = "ubuntu"
@@ -28,9 +29,4 @@ resource "aws_instance" "build" {
   }
 }
 
-resource "aws_s3_bucket_object" "war" {
-  bucket = "bak-01.train.com"
-  key = "hello.war"
-  source = "${file("${aws_instance.build}/home/boxfuse/target/hello-1.0.war")}"
-  etag = '${md5(file("${aws_instance.build}/home/boxfuse/target/hello-1.0.war"))}'
-}
+
